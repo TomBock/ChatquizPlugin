@@ -71,6 +71,8 @@ public class Quiz {
 
 		if(!silent)
 			broadcast(messages.global.cancel);
+
+		plugin.releaseQuiz();
 	}
 
 	public boolean isRunning() {

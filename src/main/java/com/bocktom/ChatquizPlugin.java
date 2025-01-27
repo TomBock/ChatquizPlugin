@@ -79,4 +79,8 @@ public class ChatquizPlugin extends JavaPlugin {
 			quiz.reward(player);
 		});
 	}
+
+	public void releaseQuiz() {
+		quiz = null;
+	}
 }
