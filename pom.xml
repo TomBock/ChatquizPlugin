@@ -62,7 +62,7 @@
                                       todir="${server.dir}/plugins/${project.artifactId}" />
 
                                 <!-- Move config file to Plugin-specific folder -->
-                                <copy file="${project.build.directory}/classes/rewards.yml"
+                                <copy file="${project.build.directory}/classes/config.yml"
                                       todir="${server.dir}/plugins/${project.artifactId}" />
 
 
@@ -81,7 +81,7 @@
                                       todir="${project.basedir}/build/${project.artifactId}" />
 
                                 <!-- Move config file to Plugin-specific folder -->
-                                <copy file="${project.build.directory}/classes/rewards.yml"
+                                <copy file="${project.build.directory}/classes/config.yml"
                                       todir="${project.basedir}/build/${project.artifactId}" />
 
                             </target>

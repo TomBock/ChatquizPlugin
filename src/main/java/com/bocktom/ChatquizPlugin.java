@@ -1,27 +1,20 @@
 package com.bocktom;
 
 import com.bocktom.serialization.Question;
-import com.bocktom.serialization.RewardReference;
-import com.google.common.base.Charsets;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class ChatquizPlugin extends JavaPlugin {
-
-	public static final String PREFIX = "§7[§5Chatquiz§7] §6";
 
 	public BukkitScheduler scheduler;
 	public FileConfiguration config;
@@ -42,24 +35,24 @@ public class ChatquizPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		if(quiz.isRunning())
+		if(isQuizRunning())
 			quiz.stop(true);
 	}
 
-	public void tryStartQuiz(Player starter, int amount, int timePerQuestion) {
+	public void tryStartQuiz(Player starter, int amountOfQuestions) {
 
 		if(quiz != null) {
-			starter.sendMessage(PREFIX + "Aktuelles Quiz wurde abgebrochen. Ein neues wird gestartet.");
+			starter.sendMessage("Aktuelles Quiz wurde abgebrochen. Ein neues wird gestartet.");
 			quiz.stop(true);
 		}
 
-		quiz = new Quiz(this, starter, amount, timePerQuestion);
+		quiz = new Quiz(this, starter, amountOfQuestions);
 		quiz.start();
 	}
 
 	public void tryStopQuiz(Player player) {
 		if(!isQuizRunning()) {
-			player.sendMessage(PREFIX + "Es läuft gerade kein Quiz");
+			player.sendMessage("Es läuft gerade kein Quiz");
 			return;
 		}
 
@@ -71,16 +64,6 @@ public class ChatquizPlugin extends JavaPlugin {
 		return quiz != null && quiz.isRunning();
 	}
 
-	public Map<String, ItemStack> loadAllRewards() {
-		FileConfiguration rewardsConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(Objects.requireNonNull(getResource("rewards.yml")), Charsets.UTF_8));
-		List<Map<String, ItemStack>> rewardsList = (List<Map<String, ItemStack>>) rewardsConfig.getList("rewards");
-
-		Map<String, ItemStack> rewards = new HashMap<>();
-		for (Map<String, ItemStack> reward : rewardsList) {
-			rewards.putAll(reward);
-		}
-		return rewards;
-	}
 
 	public List<Question> loadRandomQuestions(int amount) {
 		var yml = new Yaml(new Constructor(Question.QuestionConfig.class, new LoaderOptions()));

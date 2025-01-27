@@ -1,0 +1,36 @@
+reward-item:
+  ==: org.bukkit.inventory.ItemStack
+  v: 4189
+  type: DIAMOND_BLOCK
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    display-name: '{"text":"Special Diamond Block","italic":false,"color":"aqua"}'
+
+question-timer: 30 # Sekunden pro Frage
+question-delay: 5 # Sekunden Pause bis zur nächsten Frage
+
+# Antworten innerhalb von x sekunden
+time-based-rewards:
+  - 10: 3 # Antworten innerhalb von 10s = 3 Diablöcke
+  - 20: 2 # Antworten innerhalb von 20s = 2 Diablöcke
+  - 30: 1 # Antworten innerhalb von 30s = 1 Diablock
+
+
+# Variables:
+# {questions.amount} - Anzahl der Fragen
+# {questions.time} - Zeit pro Frage
+# {question} - Aktuelle Frage
+# {reward} - Itemname
+# {winner.name} - Der oder die am meisten beantwortet haben
+# {winner.amount} - Wie viele fragen richtig beantwortet wurden
+
+messages:
+  global:
+    start: "&5Quiz &6Ein Serverquiz startet mit &e{questions.amount} &6Fragen. Viel Erfolg!"
+    end: "&5Quiz &6Das Quiz ist nun vorbei. Top Rätsler war &e{winner.name} &6mit &e{winner.answers}/{questions.amount}"
+    cancel: "&5Quiz &6Quiz abgebrochen."
+    next-question: "&5Quiz &6Nächste Frage: &e{question}"
+    time-over: "&5Quiz &6Die Zeit ist um."
+  player:
+    success: "&5Quiz &6Richtige Antwort! Du hast die Belohnung &e{reward} &6erhalten."

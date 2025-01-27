@@ -26,15 +26,14 @@ public class ChatquizCommand implements CommandExecutor {
 
 		if(args[0].equals("start")) {
 
-			if(args.length != 3) {
-				player.sendMessage("Dieser Befehl braucht 3 Parameter: /quizchat start <amount of questions> <seconds per question>");
+			if(args.length != 2) {
+				player.sendMessage("Dieser Befehl braucht 2 Parameter: /quizchat start <amount of questions>");
 				return true;
 			}
 
-			int amount = Integer.parseInt(args[1]);
-			int timePerQuestion = Integer.parseInt(args[2]);
+			int amountOfQuestions = Integer.parseInt(args[1]);
 
-			plugin.tryStartQuiz(player, amount, timePerQuestion);
+			plugin.tryStartQuiz(player, amountOfQuestions);
 
 		} else if(args[0].equals("stop")) {
 
