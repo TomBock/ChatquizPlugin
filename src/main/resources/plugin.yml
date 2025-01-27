@@ -1,0 +1,9 @@
+name: PhoenixChatquiz
+version: 1.0
+api-version: '1.21'
+main: com.bocktom.ChatquizPlugin
+commands:
+  chatquiz:
+    description: Start or Stop a quiz
+    usage: /chatquiz start <amount of questions> <seconds per question> or /chatquiz stop
+    permission: chatquiz.any

@@ -1,0 +1,9 @@
+rewards:
+  - diamond:
+      ==: org.bukkit.inventory.ItemStack
+      v: 4189
+      type: DIAMOND_BLOCK
+      meta:
+        ==: ItemMeta
+        meta-type: UNSPECIFIC
+        display-name: '{"text":"Special Diamond Block","italic":false,"color":"aqua"}'

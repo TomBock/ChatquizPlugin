@@ -1,0 +1,14 @@
+questions:
+  - question: Ist das eine Frage?
+    answers:
+      - Ja
+      - In der Tat
+    rewards:
+      - name: diamond
+        amount: 10
+  - question: Wo war der alte Spawn?
+    answers:
+      - Brim
+    rewards:
+      - name: diamond
+        amount: 15
