@@ -1,4 +1,5 @@
 ## Phoenix Chatquiz Plugin
+.jar files can be found in /build
 
 ### Commands:
 - _/chatquiz start \<amount of questions> \<time per question>_
