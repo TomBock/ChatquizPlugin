@@ -10,10 +10,16 @@ public class Messages {
 
 	public static class GlobalMessages {
 		public String start;
-		public String end;
+		public EndMessages end;
 		public String cancel;
 		public String nextQuestion;
 		public String timeOver;
+
+		public static class EndMessages {
+			public String none;
+			public String single;
+			public String multiple;
+		}
 	}
 
 	public static class PlayerMessages {
@@ -26,7 +32,13 @@ public class Messages {
 
 		global = new Messages.GlobalMessages();
 		global.start = globalSection.getString("start");
-		global.end = globalSection.getString("end");
+
+		ConfigurationSection endSection = config.getConfigurationSection("messages.global.end");
+		global.end = new GlobalMessages.EndMessages();
+		global.end.none = endSection.getString("none");
+		global.end.single = endSection.getString("single");
+		global.end.multiple = endSection.getString("multiple");
+
 		global.cancel = globalSection.getString("cancel");
 		global.nextQuestion = globalSection.getString("next-question");
 		global.timeOver = globalSection.getString("time-over");

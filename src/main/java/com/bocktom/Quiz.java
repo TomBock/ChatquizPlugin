@@ -120,7 +120,12 @@ public class Quiz {
 		if(currentQuestionIndex >= questions.size() || currentQuestionIndex < 0) {
 			// Exit
 			stop(true);
-			broadcast(messages.global.end);
+			if(highscore == 0)
+				broadcast(messages.global.end.none);
+			else if(highscore == 1)
+				broadcast(messages.global.end.single);
+			else if(highscore == 2)
+				broadcast(messages.global.end.multiple);
 			return;
 		}
 
