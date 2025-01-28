@@ -117,7 +117,7 @@ public class Quiz {
 	}
 
 	private void askNextQuestion() {
-		if(currentQuestionIndex >= questions.size()) {
+		if(currentQuestionIndex >= questions.size() || currentQuestionIndex < 0) {
 			// Exit
 			stop(true);
 			broadcast(messages.global.end);

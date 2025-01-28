@@ -10,6 +10,7 @@ import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+import java.io.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -66,8 +67,19 @@ public class ChatquizPlugin extends JavaPlugin {
 
 
 	public List<Question> loadRandomQuestions(int amount) {
-		var yml = new Yaml(new Constructor(Question.QuestionConfig.class, new LoaderOptions()));
-		Question.QuestionConfig config = yml.load(getResource("questions.yml"));
+		Yaml yml = new Yaml(new Constructor(Question.QuestionConfig.class, new LoaderOptions()));
+		File file = new File(getDataFolder() + File.separator + "questions.yml");
+
+		Question.QuestionConfig config = null;
+
+		try (InputStream stream = new FileInputStream(file)) {
+
+			config = yml.load(stream);
+
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
 		List<Question> questions = config.questions;
 
 		Collections.shuffle(questions);
