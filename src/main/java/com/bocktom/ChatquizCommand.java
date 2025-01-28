@@ -19,15 +19,20 @@ public class ChatquizCommand implements CommandExecutor {
 		if(!(sender instanceof Player player))
 			return true;
 
+		if(!player.hasPermission("chatquiz.start")) {
+			player.sendMessage("Du hast keine Berechtigung für diesen Befehl");
+			return false;
+		}
+
 		if(args.length < 1) {
-			player.sendMessage("Dieser Befehl braucht mindestens 1 Parameter: /quizchat start/stop");
+			player.sendMessage("Dieser Befehl braucht mindestens 1 Parameter: /chatquiz start/stop");
 			return true;
 		}
 
 		if(args[0].equals("start")) {
 
 			if(args.length != 2) {
-				player.sendMessage("Dieser Befehl braucht 2 Parameter: /quizchat start <amount of questions>");
+				player.sendMessage("Dieser Befehl braucht 2 Parameter: /chatquiz start <amount of questions>");
 				return true;
 			}
 
