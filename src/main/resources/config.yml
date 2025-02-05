@@ -7,6 +7,7 @@ reward-item:
     meta-type: UNSPECIFIC
     display-name: '{"text":"Special Diamond Block","italic":false,"color":"aqua"}'
 
+quiz-warmup: 10 # Sekunden bis zur ersten Frage
 question-timer: 30 # Sekunden pro Frage
 question-delay: 5 # Sekunden Pause bis zur nächsten Frage
 
@@ -27,7 +28,7 @@ time-based-rewards:
 
 messages:
   global:
-    start: "&5Quiz &6Ein Serverquiz startet mit &e{questions.amount} &6Fragen. Viel Erfolg!"
+    start: "&5Quiz &6Ein Serverquiz startet in 10 Sekunden mit &e{questions.amount} &6Fragen. Viel Erfolg!"
     end:
       none: "&5Quiz &6Das Quiz ist nun vorbei. Es hat leider keiner gewonnen. Strengt euch mal an!"
       single: "&5Quiz &6Das Quiz ist nun vorbei. Top Rätsler war &e{winner.name} &6mit &e{winner.answers}/{questions.amount}"

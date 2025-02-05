@@ -20,6 +20,7 @@ public class Quiz {
 	private Player starter;
 
 	// General
+	private int warmupTime;
 	private int timePerQuestion;
 	private int delayPerQuestion;
 	private List<Question> questions;
@@ -45,6 +46,7 @@ public class Quiz {
 		scheduler = Bukkit.getScheduler();
 
 		reward = plugin.config.getItemStack("reward-item");
+		warmupTime = plugin.config.getInt("quiz-warmup");
 		timePerQuestion = plugin.config.getInt("question-timer");
 		delayPerQuestion = plugin.config.getInt("question-delay");
 		messages = new Messages(plugin.config);
@@ -57,13 +59,13 @@ public class Quiz {
 
 	public void start() {
 		broadcast(messages.global.start);
-
 		currentQuestionIndex = 0;
-		askNextQuestion();
+
+		currentTaskId = Bukkit.getScheduler().runTaskLater(plugin, this::askNextQuestion, 20L * warmupTime).getTaskId();
 	}
 
 	public void stop(boolean silent) {
-		if(scheduler.isCurrentlyRunning(currentTaskId))
+		if(scheduler.isCurrentlyRunning(currentTaskId) || scheduler.isQueued(currentTaskId))
 			scheduler.cancelTask(currentTaskId);
 
 		currentQuestionIndex = -1;

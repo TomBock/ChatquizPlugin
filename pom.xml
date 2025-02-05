@@ -6,7 +6,7 @@
 
     <groupId>com.bocktom</groupId>
     <artifactId>PhoenixChatquiz</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Custom -->
-        <server.dir>C:/Users/User/.mcdev</server.dir>
+        <server.dir>C:/Users/User/.mcdev/static/server</server.dir>
     </properties>
 
     <repositories>
@@ -35,8 +35,9 @@
     </dependencies>
 
     <build>
-        <plugins>
+        <finalName>PhoenixChatquiz</finalName>
 
+        <plugins>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
