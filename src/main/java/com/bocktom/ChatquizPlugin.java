@@ -2,8 +2,11 @@ package com.bocktom;
 
 import com.bocktom.serialization.Question;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.yaml.snakeyaml.LoaderOptions;
@@ -29,7 +32,9 @@ public class ChatquizPlugin extends JavaPlugin {
 		config = getConfig();
 		scheduler = Bukkit.getScheduler();
 
-		this.getCommand("chatquiz").setExecutor(new ChatquizCommand(this));
+		PluginCommand cmd = this.getCommand("chatquiz");
+		cmd.setExecutor(new ChatquizCommand(this));
+		cmd.setTabCompleter(new ChatquizTabCompleter());
 
 		getServer().getPluginManager().registerEvents(new AsyncChatListener(this), this);
 	}
