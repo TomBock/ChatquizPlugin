@@ -122,9 +122,11 @@ public class Quiz {
 		if(currentQuestionIndex >= questions.size() || currentQuestionIndex < 0) {
 			// Exit
 			stop(true);
-			if(highscore == 0)
+
+			int winnerCount = (int) answeredCorrectly.values().stream().filter(i -> i == highscore).count();
+			if(winnerCount == 0)
 				broadcast(messages.global.end.none);
-			else if(highscore == 1)
+			else if(winnerCount == 1)
 				broadcast(messages.global.end.single);
 			else
 				broadcast(messages.global.end.multiple);
