@@ -126,7 +126,7 @@ public class Quiz {
 				broadcast(messages.global.end.none);
 			else if(highscore == 1)
 				broadcast(messages.global.end.single);
-			else if(highscore == 2)
+			else
 				broadcast(messages.global.end.multiple);
 			return;
 		}
