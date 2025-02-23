@@ -137,7 +137,25 @@ public class Quiz {
 		var question = questions.get(currentQuestionIndex++);
 		currentlyAnswered.clear();
 		currentAnswers.clear();
+
+		if(StringUtil.isNullOrEmpty(question.question)) {
+			plugin.getLogger().warning("Question at index " + currentQuestionIndex + " has no question text");
+			askNextQuestion();
+			return;
+		}
 		currentQuestion = question.question;
+
+		if(question.answers == null || question.answers.isEmpty()) {
+			plugin.getLogger().warning("Question " + currentQuestion + " has no answers");
+			askNextQuestion();
+			return;
+		}
+		if(question.answers.stream().anyMatch(StringUtil::isNullOrEmpty)) {
+			plugin.getLogger().warning("Question " + currentQuestion + " has an empty or null answer");
+			askNextQuestion();
+			return;
+		}
+
 		currentAnswers.addAll(question.answers
 				.stream()
 				.map(answer -> answer.toLowerCase(Locale.ROOT))
