@@ -2,7 +2,7 @@
 .jar files can be found in /build
 
 ### Commands:
-- _/chatquiz start \<amount of questions> \<time per question>_
+- _/chatquiz start \<amount of questions>_
 - _/chatquiz stop_
 
 
