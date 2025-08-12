@@ -28,7 +28,7 @@ public class AsyncChatListener implements Listener {
 		String message = event.getMessage().toLowerCase(Locale.ROOT);
 
 		for (String answer : plugin.quiz.currentAnswers) {
-			if(message.contains(answer)) {
+			if(message.equals(answer)) {
 
 				event.setMessage(censorMessage(answer, message));
 				plugin.giveReward(event.getPlayer());
