@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Quiz {
 
@@ -107,6 +108,16 @@ public class Quiz {
 		return text.replace("&", "§"); // Color variables
 	}
 
+	private String replacePlayerVars(String text, Player player) {
+		text = replaceVars(text);
+
+		if(text.contains("{answers.correct}")) {
+			int correctAnswers = answeredCorrectly.getOrDefault(player.getUniqueId(), 0);
+			text = text.replace("{answers.correct}", String.valueOf(correctAnswers));
+		}
+		return text;
+	}
+
 	private String getWinnerNames() {
 		return answeredCorrectly.entrySet()
 				.stream()
@@ -130,6 +141,8 @@ public class Quiz {
 				broadcast(messages.global.end.single);
 			else
 				broadcast(messages.global.end.multiple);
+
+			sendPlayerStats();
 			return;
 		}
 
@@ -173,6 +186,24 @@ public class Quiz {
 			currentTaskId = scheduler.runTaskLater(plugin, this::askNextQuestion, 20L * delayPerQuestion).getTaskId();
 
 		}, 20L * timePerQuestion).getTaskId();
+	}
+
+	private void sendPlayerStats() {
+		List<UUID> winners = answeredCorrectly.entrySet()
+				.stream()
+				.filter(entry -> entry.getValue() == highscore)
+				.map(entry -> Bukkit.getPlayer(entry.getKey()))
+				.filter(Objects::nonNull)
+				.map(Player::getUniqueId).toList();
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			UUID uuid = player.getUniqueId();
+			if(winners.contains(uuid)) {
+				// Skip since winners are announced globally
+				continue;
+			}
+			player.sendMessage(Component.text(replacePlayerVars(messages.global.end.own, player)));
+		}
 	}
 
 	/**

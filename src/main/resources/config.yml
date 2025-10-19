@@ -33,6 +33,7 @@ messages:
       none: "&5Quiz &6Das Quiz ist nun vorbei. Es hat leider keiner gewonnen. Strengt euch mal an!"
       single: "&5Quiz &6Das Quiz ist nun vorbei. Top Rätsler war &e{winner.name} &6mit &e{winner.answers}/{questions.amount}"
       multiple: "&5Quiz &6Das Quiz ist nun vorbei. Top Rätsler waren &e{winner.name} &6mit &e{winner.answers}/{questions.amount}"
+      own: "&5Quiz &6Das Quiz ist nun vorbei. Du hast &e{answers.correct}/{questions.amount} &6Fragen richtig beantwortet."
     cancel: "&5Quiz &6Quiz abgebrochen."
     next-question: "&5Quiz &6Nächste Frage: &e{question}"
     time-over: "&5Quiz &6Die Zeit ist um."

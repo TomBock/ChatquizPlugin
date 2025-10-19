@@ -19,6 +19,7 @@ public class Messages {
 			public String none;
 			public String single;
 			public String multiple;
+			public String own;
 		}
 	}
 
@@ -38,6 +39,7 @@ public class Messages {
 		global.end.none = endSection.getString("none");
 		global.end.single = endSection.getString("single");
 		global.end.multiple = endSection.getString("multiple");
+		global.end.own = endSection.getString("own");
 
 		global.cancel = globalSection.getString("cancel");
 		global.nextQuestion = globalSection.getString("next-question");
