@@ -7,24 +7,14 @@ reward-item:
     meta-type: UNSPECIFIC
     display-name: '{"text":"Special Diamond Block","italic":false,"color":"aqua"}'
 
-quiz-warmup: 10 # Sekunden bis zur ersten Frage
-question-timer: 30 # Sekunden pro Frage
-question-delay: 5 # Sekunden Pause bis zur nächsten Frage
+quiz-warmup: 10 # Delay until first question
+question-timer: 30 # Time to answer each question
+question-delay: 5 # Delay until next question
 
-# Antworten innerhalb von x sekunden
-time-based-rewards:
-  - 10: 3 # Antworten innerhalb von 10s = 3 Diablöcke
-  - 20: 2 # Antworten innerhalb von 20s = 2 Diablöcke
-  - 30: 1 # Antworten innerhalb von 30s = 1 Diablock
-
-
-# Variables:
-# {questions.amount} - Anzahl der Fragen
-# {questions.time} - Zeit pro Frage
-# {question} - Aktuelle Frage
-# {reward} - Itemname
-# {winner.name} - Der oder die am meisten beantwortet haben
-# {winner.amount} - Wie viele fragen richtig beantwortet wurden
+time-based-rewards: # Answer based on speed
+  - 10: 3 # Answer within 10s = 3 diamond blocks
+  - 20: 2 # Answer within 20s = 2 diamond blocks
+  - 30: 1 # Answer within 30s = 1 diamon block
 
 messages:
   global:

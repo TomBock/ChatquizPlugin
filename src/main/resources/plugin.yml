@@ -1,5 +1,6 @@
 name: PhoenixChatquiz
-version: '1.9'
+author: TomBock
+version: '${version}'
 api-version: '1.21'
 main: com.bocktom.ChatquizPlugin
 commands:
@@ -10,3 +11,4 @@ commands:
 permissions:
     chatquiz.start:
       description: Allows someone to start and stop a Chatquiz
+      default: op

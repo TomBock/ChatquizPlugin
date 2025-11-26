@@ -1,8 +1,8 @@
 questions:
-  - question: Ist das Frage?
+  - question: Is this a quiz?
     answers:
-      - Ja
-      - Nein
-  - question: Wo war der alte Spawn?
+      - Yes
+      - No
+  - question: Is this another question?
     answers:
-      - Brim
+      - Who is this?
