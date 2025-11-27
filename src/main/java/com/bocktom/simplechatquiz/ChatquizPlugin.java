@@ -1,19 +1,20 @@
-package com.bocktom;
+package com.bocktom.simplechatquiz;
 
-import com.bocktom.serialization.Question;
+import com.bocktom.simplechatquiz.serialization.Config;
+import com.bocktom.simplechatquiz.serialization.Question;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -21,7 +22,6 @@ import java.util.logging.Logger;
 public class ChatquizPlugin extends JavaPlugin {
 
 	public BukkitScheduler scheduler;
-	public FileConfiguration config;
 	public Logger log;
 	public Quiz quiz;
 
@@ -29,8 +29,8 @@ public class ChatquizPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		log = getLogger();
-		config = getConfig();
 		scheduler = Bukkit.getScheduler();
+		new Config(this);
 
 		PluginCommand cmd = this.getCommand("chatquiz");
 		cmd.setExecutor(new ChatquizCommand(this));
@@ -92,7 +92,7 @@ public class ChatquizPlugin extends JavaPlugin {
 	}
 
 	public void giveReward(Player player) {
-		Bukkit.getScheduler().runTask(this, () -> {
+		scheduler.runTask(this, () -> {
 			quiz.reward(player);
 		});
 	}

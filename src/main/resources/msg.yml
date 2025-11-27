@@ -1,0 +1,22 @@
+global:
+  start: "&9Quiz &7» &6A Chat quiz starts in &e%questions.delay.start% seconds. There are &e%questions.amount% &6questions. Good luck!"
+
+  end:
+    none: "&9Quiz &7» &6The quiz has ended. Unfortunately, nobody answered correctly this time."
+    single: "&9Quiz &7» &6The quiz has ended. Top solver: &e%winner.name% &6with &e%winner.answers%/%questions.amount% &6correct answers."
+    multiple: "&9Quiz &7» &6The quiz has ended. Top solvers: &e%winner.name% &6with &e%winner.answers%/%questions.amount% &6correct answers."
+
+  cancel: "&9Quiz &7» &6The quiz has been cancelled."
+  next_question: "&9Quiz &7» &6Next question: &e%question%"
+  time_over: "&9Quiz &7» &6Time is up."
+
+player:
+  correct_answer: "&9Quiz &7» &6Correct answer! You received the reward: &e%reward.correct.answer%&6."
+  end:
+    looser: "&9Quiz &7» &6You answered &e%answers.correct%/%questions.amount% &6questions correctly."
+    winner: "&9Quiz &7» &6Congratulations! You received %reward.winner%"
+
+admin:
+  no_permission: "&9Quiz &7» &cYou do not have permission to use this command."
+  incorrect_usage: "&9Quiz &7» &cIncorrect command usage. Use: &e/chatquiz start <amount>/stop/reload."
+  config_reloaded: "&9Quiz &7» &6Configuration reloaded successfully."

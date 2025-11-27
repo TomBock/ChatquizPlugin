@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bocktom</groupId>
-    <artifactId>PhoenixChatquiz</artifactId>
-    <version>1.9</version>
+    <artifactId>SimpleChatquiz</artifactId>
+    <version>1.0</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Custom -->
-        <server.dir>D:/dev/.mcdev/static/server_sp</server.dir>
+        <server.dir>D:/dev/.mcdev/static/server_sp_21_9</server.dir>
     </properties>
 
     <repositories>
@@ -29,13 +29,13 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.7-R0.1-SNAPSHOT</version>
+            <version>1.21.10-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>PhoenixChatquiz</finalName>
+        <finalName>SimpleChatquiz</finalName>
 
         <plugins>
 
@@ -54,36 +54,9 @@
                                 <!-- Create folder if nonexistent -->
                                 <mkdir dir="${server.dir}/plugins" />
 
-                                <!-- Move plugin file to Plugins folder -->
+                                <!-- Move file to Plugins folder -->
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar"
                                       todir="${server.dir}/plugins" />
-
-                                <!-- Move config file to Plugin-specific folder -->
-                                <copy file="${project.build.directory}/classes/questions.yml"
-                                      todir="${server.dir}/plugins/${project.artifactId}" />
-
-                                <!-- Move config file to Plugin-specific folder -->
-                                <copy file="${project.build.directory}/classes/config.yml"
-                                      todir="${server.dir}/plugins/${project.artifactId}" />
-
-
-                                <!-- Create Repo-build folder if nonexistent -->
-                                <mkdir dir="${project.basedir}/build" />
-
-                                <!-- Move plugin file to Repo-build folder -->
-                                <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                      todir="${project.basedir}/build" />
-
-                                <!-- Create Plugin-specific folder if nonexistent -->
-                                <mkdir dir="${project.basedir}/build/${project.artifactId}" />
-
-                                <!-- Move config file to Plugin-specific folder -->
-                                <copy file="${project.build.directory}/classes/questions.yml"
-                                      todir="${project.basedir}/build/${project.artifactId}" />
-
-                                <!-- Move config file to Plugin-specific folder -->
-                                <copy file="${project.build.directory}/classes/config.yml"
-                                      todir="${project.basedir}/build/${project.artifactId}" />
 
                             </target>
                         </configuration>

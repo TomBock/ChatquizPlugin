@@ -1,0 +1,4 @@
+timer:
+  warmup: 10 # Delay until first question
+  question: 30 # Time to answer each question
+  delay: 5 # Delay until next question

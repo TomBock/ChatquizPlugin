@@ -1,4 +1,4 @@
-package com.bocktom.serialization;
+package com.bocktom.simplechatquiz.serialization;
 
 import java.util.List;
 

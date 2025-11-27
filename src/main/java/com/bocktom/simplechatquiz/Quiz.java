@@ -1,23 +1,20 @@
-package com.bocktom;
+package com.bocktom.simplechatquiz;
 
-import com.bocktom.serialization.Messages;
-import com.bocktom.serialization.Question;
+import com.bocktom.simplechatquiz.serialization.Config;
+import com.bocktom.simplechatquiz.serialization.MSG;
+import com.bocktom.simplechatquiz.serialization.Question;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Quiz {
 
 	// References
 	private ChatquizPlugin plugin;
-	private BukkitScheduler scheduler;
 	private Player starter;
 
 	// General
@@ -25,15 +22,20 @@ public class Quiz {
 	private int timePerQuestion;
 	private int delayPerQuestion;
 	private List<Question> questions;
-	private ItemStack reward;
-	private Map<Integer, Integer> timeBasedRewards = new HashMap<>();
-	private Messages messages;
+
+	private Rewards winningRewards;
+	private Rewards correctAnswerRewards;
+	private Rewards firstAnswerRewards;
+	private Rewards secondAnswerRewards;
+	private Rewards thirdAnswerRewards;
 
 	// Current Question
 	private int currentTaskId;
 	private int currentQuestionIndex = -1;
 	private String currentQuestion = "";
 	private long currentQuestionStartTime;
+	private int currentAnswerCount = 0;
+
 	public List<String> currentAnswers = new ArrayList<>();
 	private List<UUID> currentlyAnswered = new ArrayList<>();
 
@@ -44,36 +46,36 @@ public class Quiz {
 	public Quiz(ChatquizPlugin plugin, Player starter, int amountOfQuestions) {
 		this.starter = starter;
 		this.plugin = plugin;
-		scheduler = Bukkit.getScheduler();
 
-		reward = plugin.config.getItemStack("reward-item");
-		warmupTime = plugin.config.getInt("quiz-warmup");
-		timePerQuestion = plugin.config.getInt("question-timer");
-		delayPerQuestion = plugin.config.getInt("question-delay");
-		messages = new Messages(plugin.config);
+		winningRewards = Rewards.fromConfig("winner");
+		correctAnswerRewards = Rewards.fromConfig("correct_answer");
+		firstAnswerRewards = Rewards.fromConfig("first_correct_answer");
+		secondAnswerRewards = Rewards.fromConfig("second_correct_answer");
+		thirdAnswerRewards = Rewards.fromConfig("third_correct_answer");
 
-		var rewards = (List<Map<Integer, Integer>>) plugin.config.get("time-based-rewards");
-		rewards.forEach(map -> timeBasedRewards.putAll(map));
+		warmupTime = Config.settings.get.getInt("timer.warmup");
+		timePerQuestion = Config.settings.get.getInt("timer.question");
+		delayPerQuestion = Config.settings.get.getInt("timer.delay");
 
 		questions = plugin.loadRandomQuestions(amountOfQuestions);
 	}
 
 	public void start() {
-		broadcast(messages.global.start);
+		broadcast(MSG.get("global.start"));
 		currentQuestionIndex = 0;
 
-		currentTaskId = Bukkit.getScheduler().runTaskLater(plugin, this::askNextQuestion, 20L * warmupTime).getTaskId();
+		currentTaskId = plugin.scheduler.runTaskLater(plugin, this::askNextQuestion, 20L * warmupTime).getTaskId();
 	}
 
 	public void stop(boolean silent) {
-		if(scheduler.isCurrentlyRunning(currentTaskId) || scheduler.isQueued(currentTaskId))
-			scheduler.cancelTask(currentTaskId);
+		if(plugin.scheduler.isCurrentlyRunning(currentTaskId) || plugin.scheduler.isQueued(currentTaskId))
+			plugin.scheduler.cancelTask(currentTaskId);
 
 		currentQuestionIndex = -1;
 		currentAnswers.clear();
 
 		if(!silent)
-			broadcast(messages.global.cancel);
+			broadcast(MSG.get("global.cancel"));
 
 		plugin.releaseQuiz();
 	}
@@ -87,23 +89,29 @@ public class Quiz {
 	}
 
 	private String replaceVars(String text) {
-		if(text.contains("{questions.amount}")) {
-			text = text.replace("{questions.amount}", String.valueOf(questions.size()));
+		if(text.contains("%questions.amount%")) {
+			text = text.replace("%questions.amount%", String.valueOf(questions.size()));
 		}
-		if(text.contains("{questions.time}")) {
-			text = text.replace("{questions.time}", String.valueOf(timePerQuestion));
+		if(text.contains("%questions.delay.start%")) {
+			text = text.replace("%questions.delay.start%", String.valueOf(warmupTime));
 		}
-		if(text.contains("{question}")) {
-			text = text.replace("{question}", currentQuestion);
+		if(text.contains("%questions.time%")) {
+			text = text.replace("%questions.time%", String.valueOf(timePerQuestion));
 		}
-		if(text.contains("{reward}")) {
-			text = text.replace("{reward}", PlainTextComponentSerializer.plainText().serialize(reward.displayName()));
+		if(text.contains("%question%")) {
+			text = text.replace("%question%", currentQuestion);
 		}
-		if(text.contains("{winner.name}")) {
-			text = text.replace("{winner.name}", getWinnerNames());
+		if(text.contains("%reward.winner%")) {
+			text = text.replace("%reward.winner%", winningRewards.getName());
 		}
-		if(text.contains("{winner.answers}")) {
-			text = text.replace("{winner.answers}", String.valueOf(highscore));
+		if(text.contains("%reward.correct.answer%")) {
+			text = text.replace("%reward.correct.answer%", correctAnswerRewards.getName());
+		}
+		if(text.contains("%winner.name%")) {
+			text = text.replace("%winner.name%", getWinnerNames());
+		}
+		if(text.contains("%winner.answers%")) {
+			text = text.replace("%winner.answers%", String.valueOf(highscore));
 		}
 		return text.replace("&", "§"); // Color variables
 	}
@@ -111,9 +119,9 @@ public class Quiz {
 	private String replacePlayerVars(String text, Player player) {
 		text = replaceVars(text);
 
-		if(text.contains("{answers.correct}")) {
+		if(text.contains("%answers.correct%")) {
 			int correctAnswers = answeredCorrectly.getOrDefault(player.getUniqueId(), 0);
-			text = text.replace("{answers.correct}", String.valueOf(correctAnswers));
+			text = text.replace("%answers.correct%", String.valueOf(correctAnswers));
 		}
 		return text;
 	}
@@ -136,11 +144,11 @@ public class Quiz {
 
 			int winnerCount = (int) answeredCorrectly.values().stream().filter(i -> i == highscore).count();
 			if(winnerCount == 0)
-				broadcast(messages.global.end.none);
+				broadcast(MSG.get("global.end.none"));
 			else if(winnerCount == 1)
-				broadcast(messages.global.end.single);
+				broadcast(MSG.get("global.end.single"));
 			else
-				broadcast(messages.global.end.multiple);
+				broadcast(MSG.get("global.end.multiple"));
 
 			sendPlayerStats();
 			return;
@@ -150,6 +158,7 @@ public class Quiz {
 		var question = questions.get(currentQuestionIndex++);
 		currentlyAnswered.clear();
 		currentAnswers.clear();
+		currentAnswerCount = 0;
 
 		if(StringUtil.isNullOrEmpty(question.question)) {
 			plugin.getLogger().warning("Question at index " + currentQuestionIndex + " has no question text");
@@ -175,15 +184,15 @@ public class Quiz {
 				.collect(Collectors.toSet()));
 		currentQuestionStartTime = System.currentTimeMillis();
 
-		broadcast(messages.global.nextQuestion);
+		broadcast(MSG.get("global.next_question"));
 
 		// Run timer
-		currentTaskId = scheduler.runTaskLater(plugin, () -> {
+		currentTaskId = plugin.scheduler.runTaskLater(plugin, () -> {
 
-			broadcast(messages.global.timeOver);
+			broadcast(MSG.get("global.time_over"));
 
 			// Delay before next question
-			currentTaskId = scheduler.runTaskLater(plugin, this::askNextQuestion, 20L * delayPerQuestion).getTaskId();
+			currentTaskId = plugin.scheduler.runTaskLater(plugin, this::askNextQuestion, 20L * delayPerQuestion).getTaskId();
 
 		}, 20L * timePerQuestion).getTaskId();
 	}
@@ -202,8 +211,16 @@ public class Quiz {
 				// Skip since winners are announced globally
 				continue;
 			}
-			player.sendMessage(Component.text(replacePlayerVars(messages.global.end.own, player)));
+			player.sendMessage(replacePlayerVars(MSG.get("player.end.looser"), player));
 		}
+
+		winners.forEach(uuid -> {
+			Player player = Bukkit.getPlayer(uuid);
+			if(player != null) {
+				player.sendMessage(replacePlayerVars(MSG.get("player.end.winner"), player));
+				winningRewards.give(player);
+			}
+		});
 	}
 
 	/**
@@ -214,12 +231,6 @@ public class Quiz {
 		if(currentlyAnswered.contains(id))
 			return;
 
-		var secondsSinceAsked = (System.currentTimeMillis() -  currentQuestionStartTime) / 1000;
-		var amount = getRewardAmount(secondsSinceAsked);
-
-		if(amount == 0)
-			return;
-
 		currentlyAnswered.add(id);
 		int total = answeredCorrectly.getOrDefault(id, 0) + 1;
 		answeredCorrectly.put(id, total);
@@ -228,18 +239,17 @@ public class Quiz {
 		if(highscore < total)
 			highscore = total;
 
-		var item = new ItemStack(reward);
-		item.setAmount(amount);
-		PlayerUtil.give(player, item);
-
-		player.sendMessage(replaceVars(messages.player.success));
-	}
-
-	private int getRewardAmount(long secondsSinceAsked) {
-		for(int seconds : timeBasedRewards.keySet().stream().sorted(Integer::compareTo).toList()) {
-			if(secondsSinceAsked <= seconds)
-				return timeBasedRewards.get(seconds);
+		currentAnswerCount++;
+		if(currentAnswerCount == 1 && !firstAnswerRewards.isEmpty()) {
+			firstAnswerRewards.give(player);
+		} else if(currentAnswerCount == 2 && !secondAnswerRewards.isEmpty()) {
+			secondAnswerRewards.give(player);
+		} else if(currentAnswerCount == 3 && !thirdAnswerRewards.isEmpty()) {
+			thirdAnswerRewards.give(player);
+		} else {
+			correctAnswerRewards.give(player);
 		}
-		return 0;
+
+		player.sendMessage(replacePlayerVars(MSG.get("player.correct_answer"), player));
 	}
 }

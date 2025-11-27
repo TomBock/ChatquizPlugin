@@ -1,0 +1,36 @@
+winner:
+  - name: "&bChampions Sword"
+    type: item
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      v: 4189
+      type: DIAMOND_SWORD
+      meta:
+        ==: ItemMeta
+        meta-type: UNSPECIFIC
+        display-name: '{"text":"Champions Sword","italic":false,"color":"gold"}'
+  - name: "100 Coins"
+    type: command
+    command: "eco add %player% 100"
+
+correct_answer:
+  - name: "10 Coins"
+    type: command
+    command: "eco add %player% 10"
+
+
+# Optional reward for the fastest correct answers
+first_correct_answer:
+  - name: "10 Coins"
+    type: command
+    command: "eco add %player% 20"
+
+#second_correct_answer:
+#  - name: "15 Coins"
+#    type: command
+#    command: "eco add %player% 15"
+#
+#third_correct_answer:
+#  - name: "12 Coins"
+#    type: command
+#    command: "eco add %player% 12"

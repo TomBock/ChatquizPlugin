@@ -1,14 +1,14 @@
-name: PhoenixChatquiz
+name: SimpleChatquiz
 author: TomBock
-version: '${version}'
+version: 1.0
 api-version: '1.21'
-main: com.bocktom.ChatquizPlugin
+main: com.bocktom.simplechatquiz.ChatquizPlugin
 commands:
   chatquiz:
     description: Start or Stop a quiz
-    usage: /chatquiz <start|stop> [Fragenanzahl]
-    permission: chatquiz.start
+    usage: /chatquiz <start [Amount of questions]/stop/reload>
+    permission: chatquiz.admin
 permissions:
-    chatquiz.start:
+    chatquiz.admin:
       description: Allows someone to start and stop a Chatquiz
       default: op

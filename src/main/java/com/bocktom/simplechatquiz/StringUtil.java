@@ -1,4 +1,4 @@
-package com.bocktom;
+package com.bocktom.simplechatquiz;
 
 public class StringUtil {
 

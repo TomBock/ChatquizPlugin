@@ -1,4 +1,4 @@
-package com.bocktom;
+package com.bocktom.simplechatquiz;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
