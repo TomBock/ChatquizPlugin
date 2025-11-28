@@ -1,5 +1,5 @@
 global:
-  start: "&9Quiz &7» &6A Chat quiz starts in &e%questions.delay.start% seconds. There are &e%questions.amount% &6questions. Good luck!"
+  start: "&9Quiz &7» &6A Chat quiz starts in &e%questions.delay.start% seconds. There are &e%questions.amount% &6questions. You have %questions.time% seconds to answer. Good luck!"
 
   end:
     none: "&9Quiz &7» &6The quiz has ended. Unfortunately, nobody answered correctly this time."
